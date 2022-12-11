@@ -2,7 +2,7 @@
 #include "CppUnitTest.h"
 #include <string>
 
-#include "Labyrinth.h"
+#include "../Alg_2/Labyrinth.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
