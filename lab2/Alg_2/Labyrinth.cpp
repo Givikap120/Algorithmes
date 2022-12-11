@@ -40,6 +40,11 @@ bool Cell::operator==(const Cell& cmpr) const
 	return true;
 }
 
+bool Cell::operator!=(const Cell& cmpr) const
+{
+	return !(operator==(cmpr));
+}
+
 void Cell::set(Cell* top, Cell* bot, Cell* left, Cell* right, int coordX, int coordY)
 {
 	this->top = top;

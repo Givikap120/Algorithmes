@@ -11,6 +11,7 @@ struct Cell {
 	Cell(Cell* top, Cell* bot, Cell* left, Cell* right);
 
 	bool operator==(const Cell& cmpr) const;
+	bool operator!=(const Cell& cmpr) const;
 
 	void set(Cell* top, Cell* bot, Cell* left, Cell* right, int coordX, int coordY);
 	std::vector<Cell*> getPtrArray();
