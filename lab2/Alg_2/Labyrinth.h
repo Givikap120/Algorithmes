@@ -2,6 +2,9 @@
 #include <vector>
 #include <string>
 
+bool isNatural(const std::string& str);
+
+
 struct Cell {
 	Cell *top, *bot, *left, *right;
 
@@ -44,6 +47,8 @@ public:
 	void generate(float wallChance = 0.2, float deadendChance = 0.2);
 
 	Cell* getCell(int x, int y);
+	unsigned int getSizeX() const;
+	unsigned int getSizeY() const;
 
 	void print();
 

@@ -31,14 +31,13 @@ namespace debug
 
 		if (finded.x() == endX and finded.y() == endY) return true;
 
-		visited[finded.y()][finded.x()] = 1;
-
 		auto adjoining = finded.ptr->getPtrArray();
 		auto adjoiningIter = adjoining.begin();
 
 		for (size_t i = 0; i < adjoining.size(); ++i)
 		{
 			if (visited[(*adjoiningIter)->coordY][(*adjoiningIter)->coordX]) { ++adjoiningIter; continue; }
+			visited[(*adjoiningIter)->coordY][(*adjoiningIter)->coordX] = 1;
 
 			queue.push_back(Variant(*(adjoiningIter._Ptr), finded.traveledDistance + 1, calculateEuristic(*adjoiningIter, endX, endY), finded.path));
 			++adjoiningIter;
@@ -54,8 +53,6 @@ namespace debug
 
 		if (finded.x() == endX and finded.y() == endY) return true;
 
-		visited[finded.y()][finded.x()] = 1;
-
 		if (finded.euristicDistance + finded.traveledDistance >= bestDistance) return false;
 
 		auto adjoining = finded.ptr->getPtrArray();
@@ -64,6 +61,7 @@ namespace debug
 		for (size_t i = 0; i < adjoining.size(); ++i)
 		{
 			if (visited[(*adjoiningIter)->coordY][(*adjoiningIter)->coordX]) continue;
+			visited[(*adjoiningIter)->coordY][(*adjoiningIter)->coordX] = 1;
 
 			queue.push_back(Variant(*(adjoiningIter._Ptr), finded.traveledDistance + 1, calculateEuristic(*adjoiningIter, endX, endY), finded.path));
 			++adjoiningIter;
@@ -133,7 +131,7 @@ int Astar_debug(int startX, int startY, int endX, int endY, Labyrinth& labyrinth
 		if (result and priorityQueue[findedIndex].traveledDistance < bestPath.traveledDistance) bestPath = priorityQueue[findedIndex];
 		priorityQueue.erase(priorityQueue.begin() + findedIndex);
 	}
-	visited = countTrues(visitedTable) + 1;
+	visited = countTrues(visitedTable);
 
 	std::cout << "Path:\n";
 	printPath(bestPath);

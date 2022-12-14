@@ -1,35 +1,96 @@
 #include <iostream>
 #include "Labyrinth.h"
 
+#include <fstream>
+
 using namespace std;
 
 const float WALL_CHANCE = 0.5;
 const float DEADEND_CHANCE = 0;
 
+
+bool isUint(const std::string& str)
+{
+    if (str[0] == '0' and str.length() > 1) return false;
+    for (auto i = str.begin(); i != str.end(); ++i)
+    {
+        if (!std::isdigit(*i)) return false;
+    }
+    return true;
+}
+
+bool isInt(const std::string& str)
+{
+    if (str[0] != '-' and !std::isdigit(str[0])) return false;
+    if (str.length() > 1 and str[0] == '0') return false;
+
+    for (auto i = str.begin() + 1; i != str.end(); ++i)
+    {
+        if (!std::isdigit(*i)) return false;
+    }
+    return true;
+}
+
+inline bool isFileExists(const std::string& name) {
+    ifstream f(name.c_str());
+    return f.good();
+}
+
 bool menu() {
-    cout << "Enter type of input (0 - file, 1 - generation)\n";
-    bool choice;
-    cin >> choice;
+    std::string choiceStr;
+    while (1) {
+        cout << "Enter type of input (0 - file, 1 - generation)\n";
+        cin >> choiceStr;
+        if (choiceStr == "0" or choiceStr == "1") break;
+        else cout << "You brainless retard - I said you: ONLY 0 OR 1, visit oculist please\n";
+    }
+    bool choice = stoi(choiceStr);
+    
 
     Labyrinth labyrinth;
-
+    
     if (choice)
     {
-        cout << "Enter size (X Y)\n";
-        int sizeX, sizeY;
-        cin >> sizeX >> sizeY;
+        std::string sizeXstr, sizeYstr;
+        while (1)
+        {
+            cout << "Enter size (X Y)\n";
+            cin >> sizeXstr >> sizeYstr;
+            if (isNatural(sizeXstr) and isNatural(sizeYstr)) break;
+            else cout << "Do you know what SIZE is? Here is iq test link - pls do it before launching my program\nhttps://iqtest.com/quiz/iq-test/\n";
+        }
+        
+        int sizeX = stoi(sizeXstr), sizeY = stoi(sizeYstr);
+        
         labyrinth.createTable(sizeX, sizeY);
 
-        cout << "Enter seed (0 for random)\n";
-        time_t seed;
-        cin >> seed;
+
+        std::string seedStr;
+        while (1)
+        {
+            cout << "Enter seed (0 for random)\n";
+            cin >> seedStr;
+            if (isInt(seedStr)) break;
+            else cout << "Hello, do you know that seed its number? N U M B E R, not S T R I N G\n";
+        }
+        
+        time_t seed = stoi(seedStr);
+        
         if (seed == 0) seed = time(0);
         srand(seed);
         labyrinth.generate(WALL_CHANCE, DEADEND_CHANCE);
         labyrinth.print();
 
-        cout << "\nExport to file(0/1)?\n";
-        cin >> choice;
+        while (1)
+        {
+            cout << "\nExport to file(0/1)?\n";
+            cin >> choiceStr;
+            if (choiceStr == "0" or choiceStr == "1") break;
+            else cout << "Uhm, stupid clown, can you press fucking 0 or 1? 1 located in the left top corner of keyboard, 0 in top, closer to right\n";
+        }
+
+        choice = stoi(choiceStr);
+        
         if (choice)
         {
             cout << "Enter file name\n";
@@ -39,22 +100,63 @@ bool menu() {
         }
     }
     else {
-        cout << "Enter file name\n";
         std::string filename;
-        cin >> filename;
+        while (1)
+        {
+            cout << "Enter file name\n";
+            cin >> filename;
+            if (isFileExists(filename)) break;
+            else cout << "File doesn't exist\n";
+        }
+        
         labyrinth.importFromFile_Text(filename);
+        if (labyrinth.countAllNodes() == 0) { cout << "Why are you using corrupted files\nFucking idiot\n"; return -1; }
         labyrinth.print();
     }
-    cout << "Enter start node \"X Y\"\n";
+    std::string Xstr, Ystr;
     int startX, startY;
-    cin >> startX >> startY;
-    cout << "Enter end node \"X Y\"\n";
+    while (1)
+    {
+        cout << "Enter start node \"X Y\"\n";
+        cin >> Xstr >> Ystr;
+        if (isUint(Xstr) and isUint(Ystr))
+        {
+            startX = stoi(Xstr); 
+            startY = stoi(Ystr);
+            if (startX < labyrinth.getSizeX() and startY < labyrinth.getSizeY()) break;
+            else cout << "Why are you doing this\n";
+        }
+        else cout << "KYS, pls\n";
+    }
+    
     int endX, endY;
-    cin >> endX >> endY;
+    
+    while (1)
+    {
+        cout << "Enter end node \"X Y\"\n";
+        cin >> Xstr >> Ystr;
+        if (isUint(Xstr) and isUint(Ystr))
+        {
+            endX = stoi(Xstr);
+            endY = stoi(Ystr);
+            if (endX < labyrinth.getSizeX() and endY < labyrinth.getSizeY()) break;
+            else cout << "Why are you doing this\n";
+        }
+        else cout << "KYS, pls\n";
+    }
+    
 
-    cout << "What algorithm to use? (-1 - IDS, 1 - Astar, 0 - both)\n";
-    int algorithm;
-    cin >> algorithm;
+    std::string algorithmStr;
+    while (1)
+    {
+        cout << "What algorithm to use? (-1 - IDS, 1 - Astar, 0 - both)\n";
+        cin >> algorithmStr;
+        if (algorithmStr == "0" or algorithmStr == "1" or algorithmStr == "-1") break;
+        else cout << "Have your really passed a iq test? I think your iq is so low that you didn't realised how to start this test\n";
+    }
+    
+    int algorithm = stoi(algorithmStr);
+    
     int iterations, visitednodes;
     if (algorithm != -1)
     {

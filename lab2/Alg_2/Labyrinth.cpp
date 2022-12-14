@@ -3,6 +3,16 @@
 #include <iostream>
 #include <sstream>
 
+bool isNatural(const std::string& str)
+{
+	if (str[0] == '0') return false;
+	for (auto i = str.begin(); i != str.end(); ++i)
+	{
+		if (!std::isdigit(*i)) return false;
+	}
+	return true;
+}
+
 bool getBit(int n, int bit_pos) 
 {
 	return (n & (1 << bit_pos)) >> bit_pos;
@@ -233,7 +243,6 @@ void Labyrinth::exportToFile_Text(std::string filename)
 }
 
 
-
 void Labyrinth::importFromFile_Text(std::string filename)
 {
 	std::vector<std::vector<int>> verticalWalls;
@@ -241,7 +250,12 @@ void Labyrinth::importFromFile_Text(std::string filename)
 
 	std::ifstream file(filename);
 
-	file >> sizeX >> sizeY;
+	std::string sizeXstr, sizeYstr;
+	if (file.eof()) return;
+	file >> sizeXstr;
+	if (file.eof()) return;
+	file >> sizeYstr;
+	if (!isNatural(sizeXstr) or !isNatural(sizeYstr)) return;
 	createTable(sizeX, sizeY);
 
 	bool isWall = false;
@@ -274,6 +288,16 @@ void Labyrinth::importFromFile_Text(std::string filename)
 Cell* Labyrinth::getCell(int x, int y)
 {
 	return &table[y][x];
+}
+
+unsigned int Labyrinth::getSizeX() const
+{
+	return sizeX;
+}
+
+unsigned int Labyrinth::getSizeY() const
+{
+	return sizeY;
 }
 
 void Labyrinth::print()
