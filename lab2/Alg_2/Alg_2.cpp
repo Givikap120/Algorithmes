@@ -42,7 +42,7 @@ bool menu() {
         cout << "Enter type of input (0 - file, 1 - generation)\n";
         cin >> choiceStr;
         if (choiceStr == "0" or choiceStr == "1") break;
-        else cout << "You brainless retard - I said you: ONLY 0 OR 1, visit oculist please\n";
+        else cout << "Wrong input\n";
     }
     bool choice = stoi(choiceStr);
     
@@ -57,7 +57,7 @@ bool menu() {
             cout << "Enter size (X Y)\n";
             cin >> sizeXstr >> sizeYstr;
             if (isNatural(sizeXstr) and isNatural(sizeYstr)) break;
-            else cout << "Do you know what SIZE is? Here is iq test link - pls do it before launching my program\nhttps://iqtest.com/quiz/iq-test/\n";
+            else cout << "Wrong input\n";
         }
         
         int sizeX = stoi(sizeXstr), sizeY = stoi(sizeYstr);
@@ -71,7 +71,7 @@ bool menu() {
             cout << "Enter seed (0 for random)\n";
             cin >> seedStr;
             if (isInt(seedStr)) break;
-            else cout << "Hello, do you know that seed its number? N U M B E R, not S T R I N G\n";
+            else cout << "Wrong input\n";
         }
         
         time_t seed = stoi(seedStr);
@@ -86,7 +86,7 @@ bool menu() {
             cout << "\nExport to file(0/1)?\n";
             cin >> choiceStr;
             if (choiceStr == "0" or choiceStr == "1") break;
-            else cout << "Uhm, stupid clown, can you press fucking 0 or 1? 1 located in the left top corner of keyboard, 0 in top, closer to right\n";
+            else cout << "Wrong input\n";
         }
 
         choice = stoi(choiceStr);
@@ -110,7 +110,7 @@ bool menu() {
         }
         
         labyrinth.importFromFile_Text(filename);
-        if (labyrinth.countAllNodes() == 0) { cout << "Why are you using corrupted files\nFucking idiot\n"; return -1; }
+        if (labyrinth.countAllNodes() == 0) { cout << "Wrong file format\n"; return -1; }
         labyrinth.print();
     }
     std::string Xstr, Ystr;
@@ -124,9 +124,9 @@ bool menu() {
             startX = stoi(Xstr); 
             startY = stoi(Ystr);
             if (startX < labyrinth.getSizeX() and startY < labyrinth.getSizeY()) break;
-            else cout << "Why are you doing this\n";
+            else cout << "Wrong input\n";
         }
-        else cout << "KYS, pls\n";
+        else cout << "Wrong input\n";
     }
     
     int endX, endY;
@@ -140,9 +140,9 @@ bool menu() {
             endX = stoi(Xstr);
             endY = stoi(Ystr);
             if (endX < labyrinth.getSizeX() and endY < labyrinth.getSizeY()) break;
-            else cout << "Why are you doing this\n";
+            else cout << "Wrong input\n";
         }
-        else cout << "KYS, pls\n";
+        else cout << "Wrong input\n";
     }
     
 
@@ -152,7 +152,7 @@ bool menu() {
         cout << "What algorithm to use? (-1 - IDS, 1 - Astar, 0 - both)\n";
         cin >> algorithmStr;
         if (algorithmStr == "0" or algorithmStr == "1" or algorithmStr == "-1") break;
-        else cout << "Have your really passed a iq test? I think your iq is so low that you didn't realised how to start this test\n";
+        else cout << "Wrong input\n";
     }
     
     int algorithm = stoi(algorithmStr);
